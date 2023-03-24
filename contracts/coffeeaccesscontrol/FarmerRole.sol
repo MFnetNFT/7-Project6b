@@ -22,10 +22,9 @@ contract FarmerRole {
 
   // Define a modifier that checks to see if msg.sender has the appropriate role
   modifier onlyFarmer() {
-    require(isFarmer(msg.sender));
+    require(isFarmer(msg.sender), "Caller is not a farmer");
     _;
   }
-
   // Define a function 'isFarmer' to check this role
   function isFarmer(address account) public view returns (bool) {
     return farmers.has(account);
