@@ -5,7 +5,6 @@ const DistributorRole = artifacts.require("./DistributorRole.sol");
 const RetailerRole = artifacts.require("./RetailerRole.sol");
 const ConsumerRole = artifacts.require("./ConsumerRole.sol");
 const SupplyChain = artifacts.require("./SupplyChain.sol");
-const Ownable = artifacts.require("./Ownable.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(Roles);
@@ -14,5 +13,4 @@ module.exports = function(deployer) {
   deployer.deploy(RetailerRole);
   deployer.deploy(ConsumerRole);
   deployer.deploy(SupplyChain);
-  deployer.deploy(Ownable);  
 };

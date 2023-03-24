@@ -157,13 +157,15 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
     upc = 1;
   }
 
+  /**
   // Define a function 'kill' if required
   function kill() public {
     if (msg.sender == theOwner) {
       selfdestruct(theOwner);
     }
   }
-
+  */
+  
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originFarmerID, string memory _originFarmName, string memory _originFarmInformation, string  memory _originFarmLatitude, string  memory _originFarmLongitude, string  memory _productNotes) public onlyFarmer
   {
@@ -300,15 +302,16 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
     Item storage item = items[_upc];
   return 
   (
-  itemSKU,
-  itemUPC,
-  ownerID,
-  originFarmerID,
-  originFarmName,
-  originFarmInformation,
-  originFarmLatitude,
-  originFarmLongitude
+  item.sku,
+  item.upc,
+  item.ownerID,
+  item.originFarmerID,
+  item.originFarmName,
+  item.originFarmInformation,
+  item.originFarmLatitude,
+  item.originFarmLongitude
   );
+
   }
 
   // Define a function 'fetchItemBufferTwo' that fetches the data
@@ -329,15 +332,15 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
     Item storage item = items[_upc];
   return 
   (
-  itemSKU,
-  itemUPC,
-  productID,
-  productNotes,
-  productPrice,
-  itemState,
-  distributorID,
-  retailerID,
-  consumerID
+  item.sku,
+  item.upc,
+  item.productID,
+  item.productNotes,
+  item.productPrice,
+  uint(item.itemState), // Cast the itemState to uint since the return type is uint
+  item.distributorID,
+  item.retailerID,
+  item.consumerID
   );
   }
 }
