@@ -73,6 +73,17 @@ module.exports = {
       // skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
 
+    goerli: {
+      // provider: () => new HDWalletProvider(mnemonic, "https://goerli.infura.io/v3/" + infuraKey),
+      provider: () => new HDWalletProvider(mnemonic, "wss://goerli.infura.io/ws/v3/" + infuraKey),
+      // network_id: 5,
+      network_id: "*",
+      // gas: 8000000,  // optional: set the gas limit for this network
+      // gasPrice: 20000000000,  // optional: set the gas price for this network
+      timeout: 300000, // Increase timeout value to 5 minutes (in milliseconds)
+      networkCheckTimeout: 300000 // Increase network check timeout to 5 minutes (in milliseconds)
+    },
+    
     sepolia: {
       // provider: () => new HDWalletProvider(mnemonic, "https://sepolia.infura.io/v3/" + infuraKey),
       provider: () => new HDWalletProvider(mnemonic, "wss://sepolia.infura.io/ws/v3/" + infuraKey),
