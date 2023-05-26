@@ -12,7 +12,9 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;
-
+  uint  price1; // ???
+  address sender1; // ???
+  
   // Define a variable called 'sku' for Stock Keeping Unit (SKU)
   uint  sku;
 
@@ -66,6 +68,8 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
   event Shipped(uint upc);
   event Received(uint upc);
   event Purchased(uint upc);
+  event DebugEvent1(uint price1); // ???
+  event DebugEvent2(address sender1); // ???
 
   // Define a modifer that verifies the Caller
   modifier verifyCaller (address _address) {
@@ -75,6 +79,8 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
 
   // Define a modifier that checks if the paid amount is sufficient to cover the price
   modifier paidEnough(uint _price) {
+    // emit DebugEvent(msg.value); // ???
+    // emit DebugEvent(_price); // ???
     require(msg.value >= _price, "Insufficient payment"); 
     _;
   }
@@ -83,6 +89,8 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
   modifier checkValue(uint _upc) {
     uint _price = items[_upc].productPrice;
     uint amountToReturn = msg.value - _price;
+    // emit DebugEvent(msg.value); // ???
+    // emit DebugEvent(_price); // ???
     items[_upc].consumerID.transfer(amountToReturn);
     _;
   }
@@ -213,6 +221,9 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
     // Update the appropriate fields - distributorID, itemState
     items[_upc].distributorID = msg.sender;
     items[_upc].itemState = State.Sold;
+    emit DebugEvent1(msg.value); // ???
+    emit DebugEvent2(msg.sender); // ???
+    emit DebugEvent1(items[_upc].productPrice); // ???
     // Transfer money to farmer
     items[_upc].originFarmerID.transfer(items[_upc].productPrice);
     // emit the appropriate event
@@ -272,18 +283,17 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
   {
     // Assign values to the 8 parameters
     Item storage item = items[_upc];
-  return 
-  (
-  item.sku,
-  item.upc,
-  item.ownerID,
-  item.originFarmerID,
-  item.originFarmName,
-  item.originFarmInformation,
-  item.originFarmLatitude,
-  item.originFarmLongitude
-  );
-
+    return 
+    (
+    item.sku,
+    item.upc,
+    item.ownerID,
+    item.originFarmerID,
+    item.originFarmName,
+    item.originFarmInformation,
+    item.originFarmLatitude,
+    item.originFarmLongitude
+    );
   }
 
   // Define a function 'fetchItemBufferTwo' that fetches the data
@@ -302,17 +312,17 @@ contract SupplyChain is Ownable, ConsumerRole, RetailerRole, FarmerRole, Distrib
   {
     // Assign values to the 9 parameters
     Item storage item = items[_upc];
-  return 
-  (
-  item.sku,
-  item.upc,
-  item.productID,
-  item.productNotes,
-  item.productPrice,
-  uint(item.itemState), // Cast the itemState to uint since the return type is uint
-  item.distributorID,
-  item.retailerID,
-  item.consumerID
-  );
+    return 
+    (
+    item.sku,
+    item.upc,
+    item.productID,
+    item.productNotes,
+    item.productPrice,
+    uint(item.itemState), // Cast the itemState to uint since the return type is uint
+    item.distributorID,
+    item.retailerID,
+    item.consumerID
+    );
   }
 }
