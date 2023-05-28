@@ -1,112 +1,50 @@
-# Supply chain & data auditing
+# Blockchain Supply Chain Solution
 
-This repository containts an Ethereum DApp that demonstrates a Supply Chain flow between a Seller and Buyer. The user story is similar to any commonly used supply chain process. A Seller can add items to the inventory system stored in the blockchain. A Buyer can purchase such items from the inventory system. Additionally a Seller can mark an item as Shipped, and similarly a Buyer can mark an item as Received.
+This project aims to create a secure and transparent supply chain solution for the coffee industry using the Ethereum (Sepolia) blockchain. The solution allows tracking of coffee products from the farmer to the end consumer, ensuring product quality and fair trade practices. To visualize the functioning of our solution, we've created Unified Modeling Language (UML) diagrams, that can be found in the 'images' folder.
 
-The DApp User Interface when running should look like...
+The solution is built using Solidity (version 0.8.1), along with the Web3.js library (version v1.8.2) to interact with the Ethereum (Sepolia) blockchain. Its structure and flow have been depicted using UML diagrams. The contract has been deployed to the Ethereum (Sepolia) network and can be interacted with at the contract address: `0xF153e41a5ac170C4437749EB4804BD9D6bEbbB64`.
 
-![truffle test](images/ftc_product_overview.png)
+The development environment for this project consists of Truffle v5.7.7 (core: 5.7.7) and Node v16.9.1 which have been used for compiling and migrating the smart contracts as well as running tests and interact with the deployed contracts.
 
-![truffle test](images/ftc_farm_details.png)
+![Activity Diagram](images/Diagram-Activity.png)
+*Activity Diagram: shows the transitions and decisions in the process.*
 
-![truffle test](images/ftc_product_details.png)
+![Sequence Diagram](images/Diagram-Sequence.png)
+*Sequence Diagram: helps to visualize how processes operate with one another and in what order.*
 
-![truffle test](images/ftc_transaction_history.png)
+![State Diagram](images/Diagram-State.png)
+*State Diagram: demonstrates the behavior of an object, which can be in multiple states, throughout its life cycle.*
 
+![Class Diagram](images/Diagram-Class%20(Data).png)
+*Class Diagram: displays the system's static structure, providing a clear picture of the interacting entities within it.*
 
-## Getting Started
+## Project Files
+The solution is divided into the following files:
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+- **SupplyChain.sol**: This file contains the main contract that combines all other components and defines the logic for tracking coffee products. It manages the different stages of the supply chain, from harvesting to purchase by the consumer.
+- **Ownable.sol**: This file contains functions that establish the contract owner and provide functionality for transferring ownership. It ensures that only the owner can perform certain privileged operations, such as adding new roles.
+- **ConsumerRole.sol**: This file contains functions that manage the consumer role, defining access control for consumers in the supply chain.
+- **RetailerRole.sol**: This file contains functions that manage the retailer role, defining access control for retailers in the supply chain.
+- **DistributorRole.sol**: This file contains functions that manage the distributor role, defining access control for distributors in the supply chain.
 
-### Prerequisites
+Web3.js (version v1.8.2) has been instrumental in enabling the solution to interact with the Ethereum (Sepolia) blockchain. This library allows our application to send transactions, interact with smart contracts, and access blockchain data directly from JavaScript.
 
-Please make sure you've already installed ganache-cli, Truffle and enabled MetaMask extension in your browser.
+jQuery has been used to simplify the DOM manipulation, event handling, and AJAX interactions in the frontend part of the project. This enables a seamless and interactive user experience, allowing users to track the supply chain process in real-time.
 
-```
-Give examples (to be clarified)
-```
+Truffle Contract has been used to simplify working with smart contracts. It provides a more convenient and flexible way to interact with our contracts, including automatic contract abstractions, function return value decoding, and transaction simulating calls. The Truffle version used in this project is v5.7.7 (core: 5.7.7).
 
-### Installing
+## Smart Contract Details
 
-> The starter code is written for **Solidity v0.4.24**. At the time of writing, the current Truffle v5 comes with Solidity v0.5 that requires function *mutability* and *visibility* to be specified (please refer to Solidity [documentation](https://docs.soliditylang.org/en/v0.5.0/050-breaking-changes.html) for more details). To use this starter code, please run `npm i -g truffle@4.1.14` to install Truffle v4 with Solidity v0.4.24. 
+In the SupplyChain.sol file, the contract imports all necessary components and inherits from Ownable, ConsumerRole, RetailerRole, FarmerRole, and DistributorRole contracts. The contract defines an Item struct that stores all relevant information about a coffee product, such as SKU, UPC, ownerID, originFarm, productNotes, and other information.
 
-A step by step series of examples that tell you have to get a development env running
+The contract uses an enum called 'State' to represent the different stages of the supply chain: Harvested, Processed, Packed, ForSale, Sold, Shipped, Received, and Purchased. The transitions between these stages are visually represented in the State Diagram (images/Diagram-State.png). It also defines a mapping called 'items' to store items by their UPC and a mapping called 'itemsHistory' to store the history of each item through the supply chain.
 
-Clone this repository:
+The contract provides functions for each stage of the supply chain, such as `harvestItem()`, `processItem()`, `packItem()`, `sellItem()`, `buyItem()`, `shipItem()`, `receiveItem()`, and `purchaseItem()`. Each function is protected by a combination of access control (role-based) and stage-based modifiers to ensure that only the appropriate role can call the function and that the item is in the correct stage of the supply chain.
 
-```
-git clone https://github.com/udacity/nd1309/tree/master/course-5/project-6
-```
+To ensure product quality, the solution uses events to track the progress of each item through the supply chain. Events like Harvested, Processed, Packed, ForSale, Sold, Shipped, Received, and Purchased are emitted when the corresponding stage change occurs. This allows for real-time updates and transparency in the supply chain process.
 
-Change directory to ```project-6``` folder and install all requisite npm packages (as listed in ```package.json```):
+The contract also provides utility functions `fetchItemBufferOne()` and `fetchItemBufferTwo()` to retrieve item information and state by their UPC, allowing easy access to product information and verification for all participants in the supply chain.
 
-```
-cd project-6
-npm install
-```
+## Conclusion
 
-Launch Ganache:
-
-```
-ganache-cli -m "spirit supply whale amount human item harsh scare congress discover talent hamster"
-```
-
-Your terminal should look something like this:
-
-![truffle test](images/ganache-cli.png)
-
-In a separate terminal window, Compile smart contracts:
-
-```
-truffle compile
-```
-
-Your terminal should look something like this:
-
-![truffle test](images/truffle_compile.png)
-
-This will create the smart contract artifacts in folder ```build\contracts```.
-
-Migrate smart contracts to the locally running blockchain, ganache-cli:
-
-```
-truffle migrate
-```
-
-Your terminal should look something like this:
-
-![truffle test](images/truffle_migrate.png)
-
-Test smart contracts:
-
-```
-truffle test
-```
-
-All 10 tests should pass.
-
-![truffle test](images/truffle_test.png)
-
-In a separate terminal window, launch the DApp:
-
-```
-npm run dev
-```
-
-## Built With
-
-* [Ethereum](https://www.ethereum.org/) - Ethereum is a decentralized platform that runs smart contracts
-* [IPFS](https://ipfs.io/) - IPFS is the Distributed Web | A peer-to-peer hypermedia protocol
-to make the web faster, safer, and more open.
-* [Truffle Framework](http://truffleframework.com/) - Truffle is the most popular development framework for Ethereum with a mission to make your life a whole lot easier.
-
-
-## Authors
-
-See also the list of [contributors](https://github.com/your/project/contributors.md) who participated in this project.
-
-## Acknowledgments
-
-* Solidity
-* Ganache-cli
-* Truffle
-* IPFS
+In conclusion, this blockchain-based supply chain solution provides a secure, transparent, and efficient method for tracking coffee products from the farmer to the end consumer. By leveraging the Ethereum (Sepolia) blockchain and smart contracts, alongside Web3.js, jQuery, and Truffle Contract libraries, it ensures product quality, fair trade practices, and accountability for all participants in the supply chain. The contract is deployed at the Ethereum (Sepolia) address `0xF153e41a5ac170C4437749EB4804BD9D6bEbbB64`, which enables users to interact with it directly on the Ethereum (Sepolia) network.

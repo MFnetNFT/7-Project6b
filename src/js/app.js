@@ -67,7 +67,6 @@ App = {
                 App.web3Provider = window.ethereum;
                 try {
                     // Request account access
-                    // ??? await window.ethereum.enable();
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                 } catch (error) {
                     // User denied account access...
@@ -97,7 +96,6 @@ App = {
             // Retrieving accounts
             const accounts = await web3.eth.getAccounts();
             App.metamaskAccountID = accounts[0];
-            console.log("App.metamaskAccountID", App.metamaskAccountID); // ???
             return accounts[0];
         } catch (err) {
             console.log('Error in App.getMetamaskAccountID: ', err);
@@ -106,7 +104,6 @@ App = {
     
     initSupplyChain: async function () {
         try {
-            console.log("###initSupplyChain"); // ???
             // Source the truffle compiled smart contracts
             var jsonSupplyChain='../../build/contracts/SupplyChain.json';
             // JSONfy the smart contracts
@@ -117,8 +114,6 @@ App = {
             App.contracts.SupplyChain.setProvider(App.web3Provider);
             // Get the contract instance
             App.instance = await App.contracts.SupplyChain.deployed();
-            console.log(">>>Contract App.instance:", App.instance); // ???
-            console.log(">>>Contract App.instance.address:", App.instance.address); // ???
 
             await App.fetchItemBufferOne();
             await App.fetchItemBufferTwo();
@@ -180,7 +175,6 @@ App = {
 
     harvestItem: async function() {
         try {
-            console.log(">>>harvestItem"); // ???
             const instance = App.instance;
             const result = await instance.harvestItem(
                 App.upc, 
@@ -201,7 +195,6 @@ App = {
 
     processItem: async function () {
         try {
-            console.log(">>>processItem"); // ???
             const instance = App.instance;
             const result = await instance.processItem(
                 App.upc, 
@@ -216,7 +209,6 @@ App = {
     
     packItem: async function () {
         try {
-            console.log(">>>packItem"); // ???
             const instance = App.instance;
             const result = await instance.packItem(
                 App.upc, 
@@ -231,12 +223,10 @@ App = {
 
     sellItem: async function () {
         try {
-            console.log(">>>sellItem"); // ???
             const instance = App.instance;
             const priceInWei = web3.utils.toWei(App.productPrice.toString(), "ether");
             const result = await instance.sellItem(
                 App.upc,
-                // ??? App.productPrice,
                 priceInWei, 
                 {from: App.metamaskAccountID}
             );
@@ -249,10 +239,8 @@ App = {
 
     buyItem: async function () {
         try {
-            console.log(">>>buyItem"); // ???
             const instance = App.instance;
             const priceInWei = web3.utils.toWei(App.productPrice.toString(), "ether"); // convert product price to wei
-            // ??? const productPrice = web3.utils.toWei(App.productPrice, "ether"); // convert product price to wei
             const result = await instance.buyItem(
                 App.upc, 
                 {from: App.metamaskAccountID, value: priceInWei} // add value to transaction
@@ -266,7 +254,6 @@ App = {
 
     shipItem: async function () {
         try {
-            console.log(">>>shipItem"); // ???
             const instance = App.instance;
             const result = await instance.shipItem(
                 App.upc, 
@@ -281,7 +268,6 @@ App = {
 
     receiveItem: async function () {
         try {
-            console.log(">>>receiveItem"); // ???
             const instance = App.instance;
             const result = await instance.receiveItem(
                 App.upc, 
@@ -296,7 +282,6 @@ App = {
 
     purchaseItem: async function () {
         try {
-            console.log(">>>purchaseItem"); // ???
             const instance = App.instance;
             const result = await instance.purchaseItem(
                 App.upc, 
@@ -310,7 +295,6 @@ App = {
     },
 
     fetchItemBufferOne: async function () {
-        console.log(">>>fetchItemBufferOne"); // ???
         App.upc = $('#upc').val();
         console.log('upc',App.upc);
         try {
@@ -327,7 +311,6 @@ App = {
     },
 
     fetchItemBufferTwo: async function () {
-        console.log(">>>fetchItemBufferTwo"); // ???
         App.upc = $('#upc').val();
         console.log('upc',App.upc);
         try {
@@ -355,7 +338,6 @@ App = {
             };
             const instance = App.instance;
             // Subscribe to all events
-            console.log(">>>Subscribing to all events"); // ???
             instance.allEvents({ fromBlock: 0, toBlock: 'latest' })
                 .on('data', function(event) {
                     console.log(">>>Event received:", event);
@@ -378,39 +360,27 @@ App = {
             if (App.metamaskAccountID === App.ownerID) {
             // Check if the App.originFarmerID has the FarmerRole and add it if not
                 const isFarmerPre = await instance.isFarmer(App.originFarmerID);
-                console.log("Is Farmer?", isFarmerPre); // ???
                 if (!isFarmerPre) {
                     await instance.addFarmer(App.originFarmerID, { from: App.metamaskAccountID });
                     console.log("FarmerRole added to the account", App.originFarmerID);
-                    const isFarmerPos = await instance.isFarmer(App.originFarmerID); // ???
-                    console.log("Is Farmer?", isFarmerPos); // ???
                 }
                 // Check if the App.distributorID has the DistributorRole and add it if not
                 const isDistributorPre = await instance.isDistributor(App.distributorID);
-                console.log("Is Distributor?", isDistributorPre); // ???
                 if (!isDistributorPre) {
                     await instance.addDistributor(App.distributorID, { from: App.metamaskAccountID });
                     console.log("DistributorRole added to the account", App.distributorID);
-                    const isDistributorPos = await instance.isDistributor(App.distributorID); // ???
-                    console.log("Is Distributor?", isDistributorPos); // ???
                 }
                 // Check if the App.retailerID has the RetailerRole and add it if not
                 const isRetailerPre = await instance.isRetailer(App.retailerID);
-                console.log("Is Retailer?", isRetailerPre); // ???
                 if (!isRetailerPre) {
                     await instance.addRetailer(App.retailerID, { from: App.metamaskAccountID });
                     console.log("RetailerRole added to the account", App.retailerID);
-                    const isRetailerPos = await instance.isRetailer(App.retailerID); // ???
-                    console.log("Is Retailer?", isRetailerPos); // ???
                 }
                 // Check if the App.consumerID has the ConsumerRole and add it if not
                 const isConsumerPre = await instance.isConsumer(App.consumerID);
-                console.log("Is Consumer?", isConsumerPre); // ???
                 if (!isConsumerPre) {
                     await instance.addConsumer(App.consumerID, { from: App.metamaskAccountID });
                     console.log("ConsumerRole added to the account", App.consumerID);
-                    const isConsumerPos = await instance.isConsumer(App.consumerID); // ???
-                    console.log("Is Consumer?", isConsumerPos); // ???
                 }
             }
             else {
