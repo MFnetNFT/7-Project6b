@@ -33,17 +33,34 @@ jQuery has been used to simplify the DOM manipulation, event handling, and AJAX 
 
 Truffle Contract has been used to simplify working with smart contracts. It provides a more convenient and flexible way to interact with our contracts, including automatic contract abstractions, function return value decoding, and transaction simulating calls. The Truffle version used in this project is v5.7.7 (core: 5.7.7).
 
-## Smart Contract Details
+## Setting Up the DApp
 
-In the SupplyChain.sol file, the contract imports all necessary components and inherits from Ownable, ConsumerRole, RetailerRole, FarmerRole, and DistributorRole contracts. The contract defines an Item struct that stores all relevant information about a coffee product, such as SKU, UPC, ownerID, originFarm, productNotes, and other information.
+Start the application by running the DApp on a server. The DApp initialization process will begin as soon as the window loads. This includes initializing Web3, reading form data, setting up blockchain access, fetching the user's Metamask account, initializing the supply chain, and binding click events to buttons.
 
-The contract uses an enum called 'State' to represent the different stages of the supply chain: Harvested, Processed, Packed, ForSale, Sold, Shipped, Received, and Purchased. The transitions between these stages are visually represented in the State Diagram (images/Diagram-State.png). It also defines a mapping called 'items' to store items by their UPC and a mapping called 'itemsHistory' to store the history of each item through the supply chain.
+## Interacting with the DApp
 
-The contract provides functions for each stage of the supply chain, such as `harvestItem()`, `processItem()`, `packItem()`, `sellItem()`, `buyItem()`, `shipItem()`, `receiveItem()`, and `purchaseItem()`. Each function is protected by a combination of access control (role-based) and stage-based modifiers to ensure that only the appropriate role can call the function and that the item is in the correct stage of the supply chain.
+Farmer's Role:
+1. As a farmer, fill the fields in the form with relevant data such as SKU, UPC, your Metamask Account ID, Farm Name, Farm Information, Farm Latitude, Farm Longitude, and Product Notes.
+2. Once you have filled out all the necessary data, find the button associated with the harvestItem function (This button will likely be labeled 'Harvest' or something similar) and click on it to register the harvested item.
+3. Similarly, find the button associated with the processItem function and click on it to mark the item as processed.
+4. Click the button associated with the packItem function to mark the item as packed.
+5. Lastly, specify the product price, then click the button associated with the sellItem function to mark the item as for sale.
 
-To ensure product quality, the solution uses events to track the progress of each item through the supply chain. Events like Harvested, Processed, Packed, ForSale, Sold, Shipped, Received, and Purchased are emitted when the corresponding stage change occurs. This allows for real-time updates and transparency in the supply chain process.
+Distributor's Role:
+6. As a distributor, ensure the product price is correct and then click the button associated with the buyItem function to buy the item from the farmer.
+7. Click the button associated with the shipItem function to ship the item to the retailer.
 
-The contract also provides utility functions `fetchItemBufferOne()` and `fetchItemBufferTwo()` to retrieve item information and state by their UPC, allowing easy access to product information and verification for all participants in the supply chain.
+Retailer's Role:
+8. As a retailer, receive the item from the distributor by clicking the button associated with the receiveItem function.
+
+Consumer's Role:
+9. Finally, as a consumer, you can purchase the item from the retailer by clicking the button associated with the purchaseItem function.
+
+## Checking the Item Status
+10. The status of the item in the supply chain can be checked at any time by inputting the UPC into the relevant form field and clicking the button associated with the fetchItemBufferOne and fetchItemBufferTwo functions.
+
+## Watching Events
+11. All blockchain events related to the supply chain are automatically fetched and displayed in the '#ftc-events' section of the DApp, which is updated in real-time as events occur.
 
 ## Conclusion
 
